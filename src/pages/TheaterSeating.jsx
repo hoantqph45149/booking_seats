@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useMemo } from "react";
 import Pusher from "pusher-js";
+import React, { useEffect, useState } from "react";
 
 const TheaterSeating = () => {
   const [seats, setSeats] = useState([]);
-
+  const [selectedSeats, setSelectedSeats] = useState([]);
   useEffect(() => {
     const fetchSeats = async () => {
       try {
@@ -19,12 +19,34 @@ const TheaterSeating = () => {
 
   const handleSeatClick = async (id) => {
     const selectedSeat = seats.find((seat) => seat.id === id);
+
+    const isAdjacent = (seatId) => {
+      if (selectedSeats.length === 0) return true;
+      const prevSeat = seatId - 1;
+      const nextSeat = seatId + 1;
+      return (
+        selectedSeats.includes(prevSeat) || selectedSeats.includes(nextSeat)
+      );
+    };
+
+    if (!isAdjacent(id)) {
+      alert("You can only select adjacent seats.");
+      return;
+    }
+
     try {
       await fetch(`http://127.0.0.1:8000/api/seats/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...selectedSeat, status: "selected" }),
       });
+
+      setSelectedSeats((prev) => [...prev, id]);
+      setSeats((prevSeats) =>
+        prevSeats.map((seat) =>
+          seat.id === id ? { ...seat, status: "selected" } : seat
+        )
+      );
     } catch (error) {
       console.error("Error updating seat:", error);
     }

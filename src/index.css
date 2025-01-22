@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.seat-management {
+  font-family: Arial, sans-serif;
+}
+
+.seat-row {
+  margin-bottom: 16px;
+}
+
+.row-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.seats {
+  display: flex;
+  gap: 4px;
+}
+
+.seat {
+  width: 30px;
+  height: 30px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+}
+
+.seat.selected {
+  background-color: #4caf50;
+  color: white;
+}
+
+.seat:hover {
+  background-color: #e0e0e0;
+}
